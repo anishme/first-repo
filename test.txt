@@ -1,0 +1,919 @@
+namespace WinFormsApp2
+{
+    partial class Form1
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Text = "Form1";
+        }
+
+        #endregion
+    }
+}
+
+
+
+
+namespace WinFormsApp2
+{
+    public partial class Form1 : Form
+    {
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            // Initialize the form
+            Text = "Two Column Form";
+            Width = 1000;
+            Height = 700;
+            StartPosition = FormStartPosition.CenterScreen;
+
+            // Main container
+            var mainContainer = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 1,
+                RowCount = 2,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            };
+
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.Absolute, 80)); // Fixed height for header
+            mainContainer.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); // Remaining space for content
+
+            // Add header panel
+            var headerText = "Header Information Text\nThis is a multiline description.";
+            var resourcePath = Path.Combine(Application.StartupPath, "Resources", "arrow.png");
+            Image headerIcon = Image.FromFile(resourcePath);
+            var headerPanel = CreateHeaderPanel(headerText, headerIcon);
+            mainContainer.Controls.Add(headerPanel, 0, 0);
+
+            // Add main content
+            var contentContainer = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 2,
+                RowCount = 1,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            };
+
+            contentContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            contentContainer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+
+            //var leftColumn = CreateColumnGroupBox("Left Column");
+            var rightColumn = CreateColumnGroupBox("Right Column");
+
+            //contentContainer.Controls.Add(leftColumn, 0, 0);
+            contentContainer.Controls.Add(rightColumn, 1, 0);
+
+            mainContainer.Controls.Add(contentContainer, 0, 1);
+
+            Controls.Add(mainContainer);
+            //Controls.Add(CreateProperWrappingVerticalPanel());
+        }
+
+
+        private Panel CreateHeaderPanel(string headerText, Image icon)
+        {
+            // Outer header panel
+            var headerPanel = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 80, // Adjust height for multiline text
+                BackColor = Color.Green,
+            };
+
+            // Inner container to layout icon, border, and text
+            var innerPanel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 3,
+                RowCount = 1,
+                Padding = new Padding(0),
+            };
+
+            innerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 15)); // For vertical border
+            innerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // For the icon
+            innerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); // For text
+
+            // Icon
+            var iconPictureBox = new PictureBox
+            {
+                Image = icon,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Width = 100,
+                Height = 60,
+                Anchor = AnchorStyles.Top
+            };
+
+            // Vertical border
+            var borderPanel = new Panel
+            {
+                BackColor = Color.White,
+                Dock = DockStyle.Fill,
+                Width = 15,
+                Margin = new Padding(0, 0, 10, 5)
+            };
+
+            // Header text
+            var headerLabel = new Label
+            {
+                Text = headerText,
+                ForeColor = Color.White,
+                Font = new Font("Arial", 14, FontStyle.Bold),
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleLeft,
+                AutoSize = true,
+                MaximumSize = new Size(0, 60), // Restrict maximum height for multiline text
+            };
+
+            // Add controls to inner panel
+            innerPanel.Controls.Add(borderPanel, 0, 0);
+            innerPanel.Controls.Add(iconPictureBox, 1, 0);
+            innerPanel.Controls.Add(headerLabel, 2, 0);
+
+            // Add inner panel to header panel
+            headerPanel.Controls.Add(innerPanel);
+
+            return headerPanel;
+        }
+
+
+        private Panel CreateColumnGroupBox(string title)
+        {
+            var groupBox = new Panel
+            {
+                Text = title,
+                Dock = DockStyle.Fill,
+                Padding = new Padding(10)
+            };
+
+            //// Panel to contain the FlowLayoutPanel and enable scrolling
+            //var scrollablePanel = new Panel
+            //{
+            //    Dock = DockStyle.Fill,
+            //    AutoScroll = true, // Enable scrolling
+            //    BorderStyle = BorderStyle.None
+            //};
+
+            //// FlowLayoutPanel for content organization
+            //var panelContainer = new FlowLayoutPanel
+            //{
+            //    Dock = DockStyle.Fill,
+            //    FlowDirection = FlowDirection.TopDown,
+            //    AutoSize = true,
+            //    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            //    WrapContents = false, // Disable horizontal wrapping
+            //    Padding = new Padding(5)
+            //};
+
+            //// Add card panels to FlowLayoutPanel
+            //for (int i = 1; i <= 8; i++) // Example: 10 cards
+            //{
+            //    var cardPanel = CreateCardPanel($"Section {i} Header", $"Lorem Ipsum {i}");
+            //    cardPanel.Width = scrollablePanel.Width - SystemInformation.VerticalScrollBarWidth - 10; // Adjust for scrollbar
+            //    panelContainer.Controls.Add(cardPanel);
+            //}
+
+            //// Attach event to handle resizing
+            //scrollablePanel.Resize += (sender, e) =>
+            //{
+            //    foreach (Control card in panelContainer.Controls)
+            //    {
+            //        card.Width = scrollablePanel.Width - SystemInformation.VerticalScrollBarWidth - 10;
+            //    }
+            //};
+
+            //// Add FlowLayoutPanel to scrollable panel
+            //scrollablePanel.Controls.Add(panelContainer);
+
+            // Add scrollable panel to GroupBox
+            groupBox.Controls.Add(CreateResponsiveMultiGroupPanel());
+
+            return groupBox;
+        }
+
+
+        private Panel CreateCompactExtendedPanel()
+        {
+            var scrollablePanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BorderStyle = BorderStyle.FixedSingle,
+                Padding = new Padding(10),
+            };
+
+            var verticalStack = new TableLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnCount = 1,
+            };
+
+            verticalStack.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+            var items = new List<(string Label, string Value)>
+    {
+        ("About Me", "This is a long description that can be edited."),
+        ("Hobbies", "Reading, Gaming, Coding."),
+        ("Skills", "C#, SQL, Azure, UI/UX.")
+    };
+
+            foreach (var (headerText, valueText) in items)
+            {
+                var container = new Panel
+                {
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    Dock = DockStyle.Top,
+                    Padding = new Padding(0, 0, 0, 15),
+                    BackColor = Color.WhiteSmoke
+                };
+
+                var headerLabel = new Label
+                {
+                    Text = headerText,
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                    BackColor = Color.DarkSlateGray,
+                    ForeColor = Color.White,
+                    Dock = DockStyle.Top,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Padding = new Padding(10),
+                    Height = 35
+                };
+
+                var contentLayout = new TableLayoutPanel
+                {
+                    Dock = DockStyle.Top,
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    ColumnCount = 2,
+                    Padding = new Padding(10),
+                };
+
+                contentLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+                contentLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+                var fieldLabel = new Label
+                {
+                    Text = $"{headerText}:",
+                    AutoSize = true,
+                    Anchor = AnchorStyles.Top,
+                    Padding = new Padding(0, 5, 10, 0),
+                    Font = new Font("Segoe UI", 10)
+                };
+
+                var valueTextBox = new TextBox
+                {
+                    Text = valueText,
+                    Multiline = true,
+                    WordWrap = true,
+                    ScrollBars = ScrollBars.Vertical,
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                    Width = 400,
+                    Height = 60,
+                    Font = new Font("Segoe UI", 10)
+                };
+
+                // Add original label + textbox
+                contentLayout.Controls.Add(fieldLabel, 0, 0);
+                contentLayout.Controls.Add(valueTextBox, 1, 0);
+
+                // NEW: Row for Change Date, From, To
+                var horizontalRow = new FlowLayoutPanel
+                {
+                    Dock = DockStyle.Top,
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    FlowDirection = FlowDirection.LeftToRight,
+                    Padding = new Padding(0),
+                    Margin = new Padding(0, 10, 0, 0),
+                    WrapContents = false
+                };
+
+                horizontalRow.Controls.Add(new Label { Text = "Change Date:", AutoSize = true, Font = new Font("Segoe UI", 10), Margin = new Padding(0, 5, 5, 0) });
+                var datePicker = new DateTimePicker { Width = 130, Margin = new Padding(0, 3, 15, 0) };
+                horizontalRow.Controls.Add(datePicker);
+
+                horizontalRow.Controls.Add(new Label { Text = "From:", AutoSize = true, Font = new Font("Segoe UI", 10), Margin = new Padding(0, 5, 5, 0) });
+                var fromText = new TextBox { Width = 100, Margin = new Padding(0, 3, 15, 0) };
+                horizontalRow.Controls.Add(fromText);
+
+                horizontalRow.Controls.Add(new Label { Text = "To:", AutoSize = true, Font = new Font("Segoe UI", 10), Margin = new Padding(0, 5, 5, 0) });
+                var toText = new TextBox { Width = 100, Margin = new Padding(0, 3, 0, 0) };
+                horizontalRow.Controls.Add(toText);
+
+                // Save button
+                var saveButton = new Button
+                {
+                    Text = "Save",
+                    AutoSize = true,
+                    Margin = new Padding(0, 10, 0, 0),
+                    BackColor = Color.LightSteelBlue
+                };
+
+                saveButton.Click += (s, e) =>
+                {
+                    MessageBox.Show(
+                        $"Saved: {headerText}\n\nText: {valueTextBox.Text}\nDate: {datePicker.Value.ToShortDateString()}\nFrom: {fromText.Text}\nTo: {toText.Text}",
+                        "Save", MessageBoxButtons.OK, MessageBoxIcon.Information
+                    );
+                };
+
+                // Add all to container
+                container.Controls.Add(saveButton);
+                container.Controls.Add(horizontalRow);
+                container.Controls.Add(contentLayout);
+                container.Controls.Add(headerLabel);
+
+                verticalStack.Controls.Add(container);
+                verticalStack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            }
+
+            scrollablePanel.Controls.Add(verticalStack);
+
+            // Dynamic width
+            scrollablePanel.Resize += (s, e) =>
+            {
+                foreach (Control ctrl in verticalStack.Controls)
+                {
+                    if (ctrl is Panel p && p.Controls.OfType<TableLayoutPanel>().FirstOrDefault() is TableLayoutPanel layout)
+                    {
+                        var tb = layout.Controls.OfType<TextBox>().FirstOrDefault();
+                        if (tb != null)
+                            tb.Width = scrollablePanel.ClientSize.Width - 200;
+                    }
+                }
+            };
+
+            return scrollablePanel;
+        }
+
+
+
+        private Panel CreateHeaderedLabeledPanel()
+        {
+            var scrollablePanel = new Panel
+            {
+                BackColor = Color.Gray,
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BorderStyle = BorderStyle.FixedSingle,
+                Padding = new Padding(10),
+            };
+
+            var verticalStack = new TableLayoutPanel
+            {
+                BackColor = Color.Tomato,
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnCount = 1,
+            };
+
+            verticalStack.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+            var items = new List<(string Label, string Value)>
+    {
+        ("About Me", "This is a detailed description about me that can be quite long and should wrap properly without cutting off or overflowing."),
+        ("Hobbies", "Reading, Traveling, Photography, and sometimes coding side projects on weekends."),
+        ("Skills", "C#, .NET, SQL, Azure, and experience with UI/UX principles.")
+    };
+
+            foreach (var (headerText, valueText) in items)
+            {
+                var container = new Panel
+                {
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    Dock = DockStyle.Top,
+                    Padding = new Padding(0, 0, 0, 10),
+                    BackColor = Color.SkyBlue
+                };
+
+                // Header (spanning full width)
+                var headerLabel = new Label
+                {
+                    Text = headerText,
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                    BackColor = Color.Yellow,
+                    ForeColor = Color.White,
+                    Dock = DockStyle.Top,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Padding = new Padding(10,0,10,10),
+                    Height = 35
+                };
+
+                // Inner row: field name + value
+                var innerLayout = new TableLayoutPanel
+                {
+                    BackColor = Color.Pink,
+                    Dock = DockStyle.Top,
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    ColumnCount = 2,
+                    Padding = new Padding(10),
+                };
+
+                innerLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));  // Label
+                innerLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); // Value
+
+                var fieldLabel = new Label
+                {
+                    Text = $"{headerText}:",
+                    Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                    AutoSize = true,
+                    Anchor = AnchorStyles.Top,
+                    Padding = new Padding(0, 5, 10, 0)
+                };
+
+                var valueLabel = new Label
+                {
+                    Text = valueText,
+                    Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                    AutoSize = true,
+                    MaximumSize = new Size(800, 0),
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left
+                };
+
+                innerLayout.Controls.Add(fieldLabel, 0, 0);
+                innerLayout.Controls.Add(valueLabel, 1, 0);
+
+                // Add to container
+                container.Controls.Add(innerLayout);
+                container.Controls.Add(headerLabel);
+
+                // Add to vertical stack
+                verticalStack.Controls.Add(container);
+                verticalStack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            }
+
+            scrollablePanel.Controls.Add(verticalStack);
+
+            // Resize value labels dynamically
+            scrollablePanel.Resize += (s, e) =>
+            {
+                foreach (Control ctrl in verticalStack.Controls)
+                {
+                    if (ctrl is Panel p && p.Controls.OfType<TableLayoutPanel>().FirstOrDefault() is TableLayoutPanel row)
+                    {
+                        if (row.Controls.Count > 1 && row.Controls[1] is Label valLabel)
+                        {
+                            valLabel.MaximumSize = new Size(scrollablePanel.ClientSize.Width - 200, 0);
+                        }
+                    }
+                }
+            };
+
+            return scrollablePanel;
+        }
+
+
+        private Panel CreateResponsiveMultiGroupPanel()
+        {
+            // Outer scrollable panel
+            var scrollablePanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BorderStyle = BorderStyle.FixedSingle,
+                Padding = new Padding(10),
+            };
+
+            // Stack panel for all groupboxes
+            var verticalLayout = new TableLayoutPanel
+            { 
+                BackColor = Color.Red,
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnCount = 1,
+                Padding = new Padding(5),
+            };
+            verticalLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+            // Example group box data
+            var sections = new List<(string Title, string Label)>
+    {
+        ("Section 1", "Describe your experience:"),
+        ("Section 2", "Explain your goals:"),
+        ("Section 3", "Add any additional comments:")
+    };
+
+            foreach (var (title, labelText) in sections)
+            {
+                // GroupBox container
+                var groupBox = new GroupBox
+                {
+                    Text = title,
+                    Dock = DockStyle.Top,
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    Padding = new Padding(10)
+                };
+
+                // Inner layout for label, textbox, button
+                var innerLayout = new TableLayoutPanel
+                {
+                    BackColor = Color.Blue,
+                    Dock = DockStyle.Fill,
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    ColumnCount = 1,
+                };
+                innerLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+                // Label
+                var label = new Label
+                {
+                    Text = labelText,
+                    Font = new Font("Segoe UI", 10),
+                    AutoSize = true,
+                    Margin = new Padding(0, 0, 0, 5)
+                };
+
+                // Multiline TextBox
+                var textBox = new TextBox
+                {
+                    Multiline = true,
+                    WordWrap = true,
+                    ScrollBars = ScrollBars.Vertical,  
+                    Height = 80,
+                    Dock = DockStyle.Top,
+                    Font = new Font("Segoe UI", 10),
+                };
+
+                // Submit Button
+                var submitButton = new Button
+                {
+                    Text = "Submit",
+                    Dock = DockStyle.Top,
+                    Height = 35,
+                    BackColor = Color.LightBlue,
+                    Margin = new Padding(0, 10, 0, 0)
+                };
+
+                submitButton.Click += (s, e) =>
+                {
+                    MessageBox.Show($"Submitted from: {title}\n\nText: {textBox.Text}", "Submission");
+                };
+
+                // Add controls to layout
+                innerLayout.Controls.Add(label);
+                innerLayout.Controls.Add(textBox);
+                innerLayout.Controls.Add(submitButton);
+
+                // Add layout to group box
+                groupBox.Controls.Add(innerLayout);
+
+                // Add group box to main vertical layout
+                verticalLayout.Controls.Add(groupBox);
+            }
+
+            // Add everything to scrollable panel
+            scrollablePanel.Controls.Add(verticalLayout);
+
+            // Make textboxes responsive to resize
+            scrollablePanel.Resize += (s, e) =>
+            {
+                foreach (GroupBox group in verticalLayout.Controls)
+                {
+                    var tb = group.Controls.OfType<TableLayoutPanel>().FirstOrDefault()?.Controls.OfType<TextBox>().FirstOrDefault();
+                    if (tb != null)
+                    {
+                        // tb.Width = scrollablePanel.ClientSize.Width - 80; // adjust for margins
+                    }
+                }
+            };
+
+            return scrollablePanel;
+        }
+
+
+//        textBox.TextChanged += (s, e) =>
+//{
+//    var box = (TextBox)s;
+//        int numLines = box.GetLineFromCharIndex(box.TextLength) + 1;
+//        int lineHeight = TextRenderer.MeasureText("A", box.Font).Height;
+//        box.Height = Math.Min(200, lineHeight* numLines + 10); // max height cap
+//    };
+
+
+
+
+    private Panel CreateLabeledVerticalPanel()
+        {
+            var scrollablePanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BorderStyle = BorderStyle.FixedSingle,
+            };
+
+            var verticalStack = new TableLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnCount = 1,
+            };
+
+            verticalStack.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+            // Sample data
+            var items = new List<(string Label, string Value)>
+    {
+        ("About Me:", "This is a detailed description about me that can be quite long and should wrap properly without cutting off or overflowing.  should wrap properly without cutting off or overflowing"),
+        ("About Me12:", "This is a detailed description about me that can be quite long and should wrap properly without cutting off or overflowing.  should wrap properly without cutting off or overflowing"),
+        ("About Me123:", "This is a detailed description about me that can be quite long and should wrap properly without cutting off or overflowing."),
+        ("Hobbies:", "Reading, Traveling, Photography, and sometimes coding side projects on weekends."),
+        ("Skills:", "C#, .NET, SQL, Azure, and experience with UI/UX principles.")
+    };
+
+            foreach (var (labelText, valueText) in items)
+            {
+                // Inner layout with 2 columns
+                var rowLayout = new TableLayoutPanel
+                {
+                    Dock = DockStyle.Top,
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    ColumnCount = 2,
+                    Padding = new Padding(5),
+                };
+
+                rowLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // Label column
+                rowLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); // Value column
+
+                var fieldLabel = new Label
+                {
+                    Text = labelText,
+                    AutoSize = true,
+                    Anchor = AnchorStyles.Top,
+                    Padding = new Padding(0, 5, 10, 0),
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold)
+                };
+
+                var valueLabel = new Label
+                {
+                    Text = valueText,
+                    AutoSize = true,
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                    Font = new Font("Segoe UI", 10),
+                };
+
+                rowLayout.Controls.Add(fieldLabel, 0, 0);
+                rowLayout.Controls.Add(valueLabel, 1, 0);
+
+                // Optional: background container
+                var container = new Panel
+                {
+                    Dock = DockStyle.Top,
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    BackColor = Color.WhiteSmoke,
+                    Margin = new Padding(5),
+                };
+
+                container.Controls.Add(rowLayout);
+                verticalStack.Controls.Add(container);
+                verticalStack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            }
+
+            scrollablePanel.Controls.Add(verticalStack);
+
+            // Resize value label widths dynamically
+            scrollablePanel.Resize += (s, e) =>
+            {
+                foreach (Control ctrl in verticalStack.Controls)
+                {
+                    if (ctrl is Panel p && p.Controls[0] is TableLayoutPanel row)
+                    {
+                        if (row.Controls[1] is Label valLabel)
+                        {
+                            valLabel.MaximumSize = new Size(scrollablePanel.ClientSize.Width - 200, 0);
+                        }
+                    }
+                }
+            };
+
+            return scrollablePanel;
+        }
+
+
+        private Panel CreateProperWrappingVerticalPanelOld()
+        {
+            // Scrollable outer panel
+            var scrollablePanel = new Panel
+            {
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BorderStyle = BorderStyle.FixedSingle,
+            };
+
+            // Inner vertical TableLayoutPanel
+            var verticalTable = new TableLayoutPanel
+            {
+                Dock = DockStyle.Top, // Important: Top so it can grow vertically
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnCount = 1,
+            };
+
+            verticalTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+
+            // Add rows dynamically
+            for (int i = 1; i <= 10; i++)
+            {
+                var label = new Label
+                {
+                    Text = $"Item {i}: This is a very long line of text that should wrap properly within the available width of the panel without being cut off.",
+                    AutoSize = true,
+                    Dock = DockStyle.Top,
+                    MaximumSize = new Size(0, 0), // Let the layout engine determine the height
+                    Padding = new Padding(5),
+                };
+
+                var container = new Panel
+                {
+                    Dock = DockStyle.Top,
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    Padding = new Padding(5),
+                    BackColor = i % 2 == 0 ? Color.LightGray : Color.White,
+                };
+
+                container.Controls.Add(label);
+
+                verticalTable.Controls.Add(container);
+                verticalTable.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            }
+
+            scrollablePanel.Controls.Add(verticalTable);
+
+            // Important: Resize label widths when the panel resizes
+            scrollablePanel.Resize += (s, e) =>
+            {
+                foreach (Control ctrl in verticalTable.Controls)
+                {
+                    if (ctrl is Panel innerPanel && innerPanel.Controls[0] is Label innerLabel)
+                    {
+                        innerLabel.MaximumSize = new Size(scrollablePanel.ClientSize.Width - 50, 0);
+                    }
+                }
+            };
+
+            return scrollablePanel;
+        }
+
+
+        private Panel CreateCardPanel(string headerText, string name)
+        {
+            var cardPanel = new Panel
+            {
+                //AutoSize = true,
+                BorderStyle = BorderStyle.FixedSingle,
+                Padding = new Padding(10),
+                Margin = new Padding(5)
+            };
+
+            var headerLabel = new Label
+            {
+                Text = headerText,
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                Dock = DockStyle.Top,
+                BackColor = SystemColors.ControlDark,
+                ForeColor = Color.White,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Height = 30,
+                Padding = new Padding(5),
+            };
+
+            var cardLayout = new TableLayoutPanel
+            {
+                BackColor = Color.Red,
+                Dock = DockStyle.Top,
+                ColumnCount = 2,
+                RowCount = 3,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            };
+
+            // Name
+            cardLayout.Controls.Add(new Label { Text = "Name11:", Dock = DockStyle.Fill, BackColor = Color.Blue, ForeColor=Color.Purple }, 0, 0);
+            cardLayout.Controls.Add(new Label { Text = name, Dock = DockStyle.Fill, BackColor = Color.Yellow }, 1, 0);
+
+            // Description
+            cardLayout.Controls.Add(new Label { Text = "Description:", Dock = DockStyle.Fill }, 0, 1);
+            cardLayout.Controls.Add(new TextBox { Dock = DockStyle.Fill }, 1, 1);
+
+            // ComboBox
+            cardLayout.Controls.Add(new Label { Text = "Select Option:", Dock = DockStyle.Fill }, 0, 2);
+            var comboBox = new ComboBox
+            {
+                Dock = DockStyle.Fill,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+            };
+            comboBox.Items.AddRange(new object[] { "Option 1", "Option 2", "Option 3" });
+            cardLayout.Controls.Add(comboBox, 1, 2);
+
+            // Add header and layout to card
+            cardPanel.Controls.Add(headerLabel);
+            cardPanel.Controls.Add(cardLayout);
+
+            return cardPanel;
+        }
+
+    }
+}
+
+
+
+
+
+
+
+//private GroupBox CreateColumnGroupBox(string title)
+//{
+//    var groupBox = new GroupBox
+//    {
+//        Text = title,
+//        Dock = DockStyle.Fill,
+//        Padding = new Padding(10)
+//    };
+
+//    // Use FlowLayoutPanel to contain the card panels
+//    var panelContainer = new FlowLayoutPanel
+//    {
+//        Dock = DockStyle.Fill,
+//        FlowDirection = FlowDirection.TopDown,
+//        AutoScroll = true,
+//        Padding = new Padding(5),
+//    };
+
+//    // Add multiple card panels
+//    for (int i = 1; i <= 5; i++)
+//    {
+//        var cardPanel = CreateCardPanel($"Section {i} Header", $"Lorem Ipsum {i}");
+//        panelContainer.Controls.Add(cardPanel);
+//    }
+
+//    groupBox.Controls.Add(panelContainer);
+//    return groupBox;
+//}
+
+
+//private Panel CreateHeaderPanel(string headerText)
+//{
+//    var headerPanel = new Panel
+//    {
+//        Dock = DockStyle.Top,
+//        Height = 50,
+//        BackColor = Color.Green,
+//    };
+
+//    var headerLabel = new Label
+//    {
+//        Text = headerText,
+//        ForeColor = Color.White,
+//        Font = new Font("Arial", 14, FontStyle.Bold),
+//        Dock = DockStyle.Fill,
+//        TextAlign = ContentAlignment.MiddleCenter,
+//    };
+
+//    headerPanel.Controls.Add(headerLabel);
+//    return headerPanel;
+//}
